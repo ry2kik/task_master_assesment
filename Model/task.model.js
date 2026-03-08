@@ -12,7 +12,7 @@ const taskSchema = new Schema({
         required: true,
         trim: true
     },
-    dueData: {
+    dueDate: {
         type: String,
         required: true,
         trim: true
