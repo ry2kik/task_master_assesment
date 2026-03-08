@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import validateSignupData from '../utils/validate.js'
+import { validateSignupData, validateProfileData } from '../utils/validate.js'
 import User from '../Model/user.model.js'
 
 export const signupController = async (req, res) => {
@@ -20,7 +20,7 @@ export const signupController = async (req, res) => {
         const hashPass = await bcrypt.hash(password, 10);
 
         // TODO Updating DB with the new User
-        const user = await new User({ userName, email, password: hashPass })
+        const user = new User({ userName, email, password: hashPass })
 
         // TODO Saving the user to the DB
         await user.save()
@@ -58,5 +58,30 @@ export const loginController = async (req, res) => {
 }
 
 export const fetchProfile = async (req, res) => {
+    try {
+        // TODO Validate User Profile Data
+        if (!validateProfileData(req)) {
+            throw new Error("Invalid Edit request");
+        }
 
+        // TODO Editing the loggedin user's profile and saving it in DB
+        const loggedUser = req.user;
+        Object.keys(req.body).forEach(key => loggedUser[key] = req.body[key]);
+        await loggedUser.save();
+
+        res.status(200).json({ message: "You've successfully edited your profile", loggedUser });
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
+
+export const logoutController = async (req, res) => {
+    try {
+        const loggedUser = req.user;
+        loggedUser.logoutTime = new Date();
+        await loggedUser.save();
+        return res.status(200).json({ message: 'You have successfully logged out' });
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
 }

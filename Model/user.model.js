@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import validator from 'validator';
 import jwt from 'jsonwebtoken'
 
 const Schema = mongoose.Schema;
@@ -20,6 +21,34 @@ const userSchema = new Schema({
         type: String,
         required: true,
         unique: true,
+    },
+
+    age: {
+        type: Number
+    },
+
+    gender: {
+        type: String,
+        enum: ['male', 'female', 'others'],
+        validate(value) {
+            if (!['male', 'female', 'others'].includes(value)) {
+                throw new Error("Gender data is not valid");
+            }
+        }
+    },
+
+    about: {
+        type: String,
+        default:  'This is a default about of the user!'
+    },
+    
+    avaterUrl: {
+        type: String,
+        vaidate(value) {
+            if (!validator.isURL(value)) {
+                throw new Error("Not a valid URL");
+            }
+        }
     }
 });
 

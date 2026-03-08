@@ -16,6 +16,19 @@ const taskSchema = new Schema({
         type: String,
         required: true,
         trim: true
+    },
+    status: {
+        type: String,
+        enum: ['open', 'completed'],
+        default: 'open'
+    },
+    assignTo: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    },
+    team: {
+        type: Schema.Types.ObjectId,
+        ref: 'Team'
     }
 });
 

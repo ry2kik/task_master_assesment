@@ -2,7 +2,8 @@ import express from 'express'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose';
 import userRouter from './Routes/app.routes.js'
-import taskRouter from './Routes/task.routes.js'
+import teamRouter from './Routes/team.routes.js'
+// import taskRouter from './Routes/task.routes.js'
 
 dotenv.config({ path: '.env' });
 const app = express();
@@ -11,7 +12,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/auth', userRouter);
-app.use('/api', taskRouter);
+app.use('/api', teamRouter);
+// app.use('/api', taskRouter);
 
 mongoose.connect(process.env.MONGO_URL).then(() => {
     console.log('Connected to DB successfully');
