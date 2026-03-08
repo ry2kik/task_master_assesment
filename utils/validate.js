@@ -1,0 +1,17 @@
+import validator from 'validator'
+
+export const validateSignupData = (req) => {
+    const { userName, email, password } = req.body;
+    if (!userName || !email || !password) {
+        throw new Error('All the fields must be filled')
+    }
+
+    if (!validator.isEmail(email)) throw new Error("Not a valid email");
+    if (!validator.isStrongPassword(password)) throw new Error("Not a strong password");
+}
+
+export const validateProfileData = (req) => {
+    const allowedFields = ['userName', 'age', 'gender', 'about', 'avaterUrl'];
+    const isEditAllowed = Object.keys(req.body).every(fields => allowedFields.includes(fields));
+    return isEditAllowed;
+}
